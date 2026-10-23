@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Agendamento rápido e fácil de lavagem de carros para a semana atual. Escolha o dia e garanta sua vaga.">
+  <title>Lava-Rápido Express | Agendamento da Semana</title>
+  
+  <!-- Tipografia Moderna (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Folha de Estilos Principal -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Container Principal estilo Mobile App -->
+  <div class="app-container">
+
+    <!-- Cabeçalho -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.7 2 11.1 2 11.5V16c0 .6.4 1 1 1h2"/>
+            <circle cx="7" cy="17" r="2"/>
+            <path d="M9 17h6"/>
+            <circle cx="17" cy="17" r="2"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Lava-Rápido Express</h1>
+          <p class="brand-subtitle">Agendamento semanal descomplicado</p>
+        </div>
+      </div>
+      
+      <!-- Aviso de Funcionamento Configurável -->
+      <div class="info-badge">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span id="badge-horario">Seg a Sex: 09h às 16h • Sáb: 08h às 16h</span>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="app-main">
+      
+      <!-- Seção 1: Seleção de Dias da Semana Atual -->
+      <section class="section-dias" aria-labelledby="titulo-semana">
+        <div class="section-header">
+          <h2 id="titulo-semana" class="section-title">Dias disponíveis nesta semana</h2>
+          <span class="section-hint">Toque para selecionar o dia</span>
+        </div>
+
+        <!-- Lista dinâmica de dias (gerada via app.js) -->
+        <div id="grid-dias" class="grid-dias" role="radiogroup" aria-label="Dias da semana atual">
+          <!-- Os cards de cada dia da semana serão injetados dinamicamente aqui -->
+        </div>
+
+        <!-- Mensagem de estado vazio (ex: domingo ou fim da semana) -->
+        <div id="alerta-sem-dias" class="alerta-info hidden" role="alert">
+          <p>Não há mais dias de atendimento disponíveis para esta semana. Retornaremos na próxima segunda-feira!</p>
+        </div>
+      </section>
+
+      <!-- Seção 2: Formulário de Confirmação -->
+      <section class="section-confirmacao" aria-labelledby="titulo-confirmacao">
+        <div class="section-header">
+          <h2 id="titulo-confirmacao" class="section-title">Dados do Agendamento</h2>
+          <span class="section-hint">Preencha para garantir sua vaga</span>
+        </div>
+
+        <form id="form-agendamento" class="form-card" novalidate>
+          
+          <!-- Resumo visual do dia selecionado -->
+          <div class="resumo-dia" id="resumo-dia-container">
+            <span class="resumo-label">Dia Selecionado:</span>
+            <span class="resumo-valor" id="resumo-dia-texto">Nenhum dia selecionado</span>
+          </div>
+
+          <!-- Campo: Nome Completo -->
+          <div class="form-group">
+            <label for="cliente-nome" class="form-label">Seu Nome Completo</label>
+            <input 
+              type="text" 
+              id="cliente-nome" 
+              name="nome" 
+              class="form-input" 
+              placeholder="Ex: Carlos Silva" 
+              autocomplete="name"
+              required
+            >
+            <span class="form-error" id="erro-nome" aria-live="polite"></span>
+          </div>
+
+          <!-- Campo: Telefone / WhatsApp -->
+          <div class="form-group">
+            <label for="cliente-telefone" class="form-label">WhatsApp / Telefone</label>
+            <input 
+              type="tel" 
+              id="cliente-telefone" 
+              name="telefone" 
+              class="form-input" 
+              placeholder="(11) 99999-9999" 
+              autocomplete="tel"
+              required
+            >
+            <span class="form-error" id="erro-telefone" aria-live="polite"></span>
+          </div>
+
+          <!-- Campo: Placa ou Modelo (Identificação do Veículo) -->
+          <div class="form-group">
+            <label for="cliente-veiculo" class="form-label">Modelo ou Placa do Veículo</label>
+            <input 
+              type="text" 
+              id="cliente-veiculo" 
+              name="veiculo" 
+              class="form-input" 
+              placeholder="Ex: Fiat Argo ou ABC-1D23"
+              required
+            >
+            <span class="form-error" id="erro-veiculo" aria-live="polite"></span>
+          </div>
+
+          <!-- Botão de Ação -->
+          <button type="submit" id="btn-confirmar" class="btn-primary" disabled>
+            <span>Confirmar Agendamento</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+    </main>
+
+    <!-- Rodapé Minimalista -->
+    <footer class="app-footer">
+      <p>Lava-Rápido Express • Agendamento Online Oficial</p>
+    </footer>
+
+    <!-- Modal de Confirmação de Sucesso -->
+    <div id="modal-sucesso" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <div class="modal-card">
+        <div class="modal-icon-success" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+
+        <h3 id="modal-titulo" class="modal-title">Agendamento Confirmado!</h3>
+        <p class="modal-desc">Sua vaga para lavagem está garantida. Veja os detalhes abaixo:</p>
+
+        <div class="modal-detalhes">
+          <div class="detalhe-item">
+            <span class="detalhe-label">Dia Marcado:</span>
+            <strong class="detalhe-valor" id="modal-resumo-data">-</strong>
+          </div>
+          <div class="detalhe-item">
+            <span class="detalhe-label">Cliente:</span>
+            <strong class="detalhe-valor" id="modal-resumo-cliente">-</strong>
+          </div>
+          <div class="detalhe-item">
+            <span class="detalhe-label">Veículo:</span>
+            <strong class="detalhe-valor" id="modal-resumo-veiculo">-</strong>
+          </div>
+          <div class="detalhe-item">
+            <span class="detalhe-label">Código da Vaga:</span>
+            <strong class="detalhe-valor highlight" id="modal-resumo-protocolo">-</strong>
+          </div>
+        </div>
+
+        <p class="modal-nota" id="modal-nota-horario">📍 Traga seu carro no horário de funcionamento. Te aguardamos!</p>
+
+        <button type="button" id="btn-fechar-modal" class="btn-secondary">
+          Fazer Outro Agendamento
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Lógica da Aplicação -->
+  <script src="app.js" defer></script>
+</body>
+</html>

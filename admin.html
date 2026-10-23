@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Dono | Lava-Rápido Express</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <div class="app-container admin-container">
+
+    <!-- Cabeçalho do Painel -->
+    <header class="app-header admin-header">
+      <div class="brand">
+        <div class="brand-icon admin-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Painel do Dono</h1>
+          <p class="brand-subtitle">Gestão de agendamentos em tempo real</p>
+        </div>
+      </div>
+
+      <div class="admin-actions-top">
+        <a href="index.html" class="btn-link">← Ver Site do Cliente</a>
+        <div style="display: flex; gap: 0.4rem;">
+          <button id="btn-novo-manual" class="btn-refresh" style="background-color: var(--primary); border-color: var(--primary); color: #fff;" title="Adicionar agendamento sem limite">
+            + Agendar
+          </button>
+          <button id="btn-atualizar" class="btn-refresh" title="Atualizar lista">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            Atualizar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal do Painel do Dono -->
+    <main id="conteudo-admin">
+
+      <!-- Métricas / Resumo Rápido -->
+      <section class="metricas-grid">
+        <div class="metrica-card">
+          <span class="metrica-rotulo">Total Marcados</span>
+          <strong id="metrica-total" class="metrica-valor">0</strong>
+        </div>
+        <div class="metrica-card">
+          <span class="metrica-rotulo">Hoje</span>
+          <strong id="metrica-hoje" class="metrica-valor highlight">0</strong>
+        </div>
+        <div class="metrica-card">
+          <span class="metrica-rotulo">Limite do Dono</span>
+          <strong id="metrica-vagas-max" class="metrica-valor" style="font-size: 1.1rem; color: var(--color-success);">Ilimitado</strong>
+        </div>
+      </section>
+
+      <!-- Filtros Rápidos -->
+      <section class="filtros-container">
+        <span class="filtros-label">Filtrar por dia:</span>
+        <div id="filtro-dias" class="filtros-scroll">
+          <button class="filtro-btn active" data-filtro="todos">Todos</button>
+          <!-- Botões dos dias serão injetados via admin.js -->
+        </div>
+      </section>
+
+      <!-- Lista de Agendamentos -->
+      <section class="agendamentos-section">
+        <div class="section-header">
+          <h2 class="section-title">Lista de Lavagens</h2>
+          <span id="contador-lista" class="section-hint">Carregando...</span>
+        </div>
+
+        <div id="lista-agendamentos" class="lista-cards">
+          <!-- Os cards de agendamento serão renderizados dinamicamente -->
+        </div>
+
+        <!-- Estado vazio -->
+        <div id="sem-agendamentos" class="alerta-info hidden">
+          <p>Nenhum agendamento encontrado para o filtro selecionado.</p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Modal para o Dono Agendar Manualmente Sem Limite -->
+    <div id="modal-manual" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-manual-titulo">
+      <div class="modal-card" style="text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+          <h3 id="modal-manual-titulo" class="modal-title" style="font-size: 1.15rem; margin: 0;">Novo Agendamento (Dono)</h3>
+          <button type="button" id="btn-fechar-modal-manual" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; line-height: 1;">✕</button>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem;">O dono pode agendar qualquer dia sem limite de vagas.</p>
+
+        <form id="form-manual" class="form-card" style="padding: 0; border: none; box-shadow: none; background: transparent; gap: 0.85rem;">
+          <div class="form-group">
+            <label for="manual-data" class="form-label">Data da Lavagem</label>
+            <input type="date" id="manual-data" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="manual-nome" class="form-label">Nome do Cliente</label>
+            <input type="text" id="manual-nome" class="form-input" placeholder="Ex: Roberto Gomes" required>
+          </div>
+          <div class="form-group">
+            <label for="manual-telefone" class="form-label">WhatsApp / Telefone</label>
+            <input type="tel" id="manual-telefone" class="form-input" placeholder="(11) 99999-9999" required>
+          </div>
+          <div class="form-group">
+            <label for="manual-veiculo" class="form-label">Veículo (Modelo / Placa)</label>
+            <input type="text" id="manual-veiculo" class="form-input" placeholder="Ex: Corolla Preto - BRA2E19" required>
+          </div>
+
+          <button type="submit" id="btn-salvar-manual" class="btn-primary" style="margin-top: 0.5rem;">
+            Confirmar Agendamento Ilimitado
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="admin.js" defer></script>
+</body>
+</html>
